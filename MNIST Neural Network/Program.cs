@@ -118,6 +118,7 @@ namespace MNIST_Neural_Network
 
         private static void DigitRecognitionMNIST()
         {
+            Console.WriteLine("Wait");
             int h = 0;
             for (int i = 0; i < 10000; i++)
             {

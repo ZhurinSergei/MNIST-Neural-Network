@@ -1,0 +1,8 @@
+C:\Users\Сергей\Documents\Visual Studio 2017\Projects\MNIST Neural Network\MNIST Neural Network\bin\Debug\MNIST Neural Network.exe.config
+C:\Users\Сергей\Documents\Visual Studio 2017\Projects\MNIST Neural Network\MNIST Neural Network\bin\Debug\MNIST Neural Network.exe
+C:\Users\Сергей\Documents\Visual Studio 2017\Projects\MNIST Neural Network\MNIST Neural Network\bin\Debug\MNIST Neural Network.pdb
+C:\Users\Сергей\Documents\Visual Studio 2017\Projects\MNIST Neural Network\MNIST Neural Network\obj\Debug\MNIST Neural Network.csprojResolveAssemblyReference.cache
+C:\Users\Сергей\Documents\Visual Studio 2017\Projects\MNIST Neural Network\MNIST Neural Network\obj\Debug\MNIST_Neural_Network.Properties.Resources.resources
+C:\Users\Сергей\Documents\Visual Studio 2017\Projects\MNIST Neural Network\MNIST Neural Network\obj\Debug\MNIST Neural Network.csproj.GenerateResource.Cache
+C:\Users\Сергей\Documents\Visual Studio 2017\Projects\MNIST Neural Network\MNIST Neural Network\obj\Debug\MNIST Neural Network.exe
+C:\Users\Сергей\Documents\Visual Studio 2017\Projects\MNIST Neural Network\MNIST Neural Network\obj\Debug\MNIST Neural Network.pdb
