@@ -62,7 +62,6 @@ namespace MNIST_Neural_Network
                     b &= NN.Study(input[i].GetPixels(), correctOutput[i]);
 
                     if (i % 100 == 0) Console.WriteLine("Количество выученых примеров: - " + i);
-
                 }
 
                 DigitRecognitionMNIST();
@@ -85,8 +84,8 @@ namespace MNIST_Neural_Network
                 {
                     double[] number = LoadNumberImage(l + "" + j + ".png");
 
-                    Console.WriteLine(l + "" + j + ".png = " + NN.getAnswer(number));
-                    if (l == NN.getAnswer(number)) h++;
+                    Console.WriteLine(l + "" + j + ".png = " + NN.GetAnswer(number));
+                    if (l == NN.GetAnswer(number)) h++;
                 }
                 Console.WriteLine();
             }
@@ -122,7 +121,7 @@ namespace MNIST_Neural_Network
             int h = 0;
             for (int i = 0; i < 10000; i++)
             {
-                if (NN.getAnswer(test[i].GetPixels()) == test[i].GetLabel())
+                if (NN.GetAnswer(test[i].GetPixels()) == test[i].GetLabel())
                 {
                     h++;
                 }

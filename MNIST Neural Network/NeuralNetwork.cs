@@ -69,13 +69,13 @@ namespace MNIST_Neural_Network
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public double getAnswer(double[] input)
+        public double GetAnswer(double[] input)
         {
             double[][] output = OutputOfANeurons(input);
             double max = int.MinValue;
             int number = -1;
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < output[neurons.Count() - 1].Count(); i++)
             {
                 if (output[neurons.Count() - 1][i] > max)
                 {
@@ -83,7 +83,7 @@ namespace MNIST_Neural_Network
                     number = i;
                 }
             }
-
+            
             return number;
         }
 
