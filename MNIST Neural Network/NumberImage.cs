@@ -8,14 +8,21 @@ namespace MNIST_Neural_Network
 {
     class NumberImage
     {
-        public int width = 28;
-        private int height = 28;
-        private double[] pixels;
-        private byte label;
+        private int width;
+        private int height;
 
-        public NumberImage(double[][] pixels, byte label)
+        private int size;
+        private double[] pixels;
+        private int label;
+
+        public NumberImage(int numberOfRows, int numberOfColumns, double[][] pixels, int label)
         {
-            this.pixels = new double[28 * 28];
+            if (numberOfColumns != numberOfRows) throw new SizeFileException();
+            this.size = numberOfRows;
+
+            this.width = numberOfColumns;
+            this.height = numberOfRows;
+            this.pixels = new double[width * height];
 
             for (int i = 0; i < height; ++i)
             {
@@ -28,7 +35,7 @@ namespace MNIST_Neural_Network
             this.label = label;
         }
 
-        public byte GetLabel()
+        public int GetLabel()
         {
             return label;
         }
@@ -36,6 +43,11 @@ namespace MNIST_Neural_Network
         public double[] GetPixels()
         {
             return pixels;
+        }
+
+        public int GetSize()
+        {
+            return size;
         }
     }
 }

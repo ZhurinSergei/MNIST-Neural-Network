@@ -70,13 +70,13 @@ namespace MNIST_Neural_Network
 
         public void UpdateWeights(double[] output)
         {
-            double e = 0.5;
+            double epsilone = 0.5;
 
             for (int r = 0; r < numberOfSynapses; r++)
             {
-                weight[r] += e * error * output[r];
+                weight[r] += epsilone * error * output[r];
             }
-            bias += e * error * 1; // 1 - constant input for any bias;
+            bias += epsilone * error * 1; // 1 - constant input for any bias;
 
         }
 
@@ -84,7 +84,7 @@ namespace MNIST_Neural_Network
         {
             for (int r = 0; r < numberOfSynapses; r++)
             {
-                weight[r] = (double)rand.Next(-10000, 10001) / 20000;
+                weight[r] = (double)rand.Next(-10000, 10001) / 20000; // random [-0.5; 0.5]
             }
         }
 

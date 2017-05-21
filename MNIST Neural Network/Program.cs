@@ -1,31 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MNIST_Neural_Network
 {
-    class Program
+    static class Program
     {
-        private static NeuralNetwork NN = new NeuralNetwork(new int[] { 28 * 28, 500, 150, 10 });
+        private static NeuralNetwork NN;
         private static NumberImage[] input;
         private static NumberImage[] test;
-
+        private static LoadAndSaveData dataWork;
         private static double[][] correctOutput;
         private static int epochs = 0;
 
         static void Main(string[] args)
         {
+            dataWork = LoadAndSaveData.GetInstance();
+            NN = new NeuralNetwork(new int[] { 28 * 28, 500, 150, 10 });
+
             string pixelFile = "train-images.idx3-ubyte";
             string labelFile = "train-labels.idx1-ubyte";
             string pixelTest = "t10k-images.idx3-ubyte";
             string labelTest = "t10k-labels.idx1-ubyte";
 
-            input = LoadDataMNIST(pixelFile, labelFile, 60000);
-            test = LoadDataMNIST(pixelTest, labelTest, 10000);
+            input = dataWork.LoadDataMNIST(pixelFile, labelFile, 60000);
+            test = dataWork.LoadDataMNIST(pixelTest, labelTest, 10000);
 
             correctOutput = new double[60000][];
             for (int i = 0; i < 60000; i++)
@@ -69,144 +66,46 @@ namespace MNIST_Neural_Network
                 Console.WriteLine("Epochs = " + epochs);
                 Console.WriteLine("----------------------");
 
-                //SaveNS(epochs, (double)h / 1000);
             } while (!b);
         }
 
         private static void Example()
         {
-            int h = 0;
-            LoadNS();
+            NumberImage[] number = new NumberImage[50];
+            int countOfCorrectlyRecognized = 0;
 
-            for (int j = 1; j < 6; j++)
+            dataWork.LoadNS(NN);
+
+            for (int order = 0; order < 5; order++)
             {
-                for (int l = 0; l < 10; l++)
+                for (int num = 0; num < 10; num++)
                 {
-                    double[] number = LoadNumberImage(l + "" + j + ".png");
+                    number[order * 10 + num] = dataWork.LoadNumberImage(num, order);
 
-                    Console.WriteLine(l + "" + j + ".png = " + NN.GetAnswer(number));
-                    if (l == NN.GetAnswer(number)) h++;
+                    int answer = NN.GetAnswer(number[order * 10 + num].GetPixels());
+
+                    Console.WriteLine(order + "" + num + ".png = " + answer);
+                    if (num == answer) countOfCorrectlyRecognized++;
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine((double)h / 50 * 100 + "%\n");
 
-        }
-
-        /// <summary>
-        /// Имя растрового изображения 28*28 пикселей в котором нарисована цифра
-        /// Возвращает массив double от 0 до 1, где 1 черный цвет пикселя, 0 белый
-        /// </summary>
-        /// <param name="nameFile"></param>
-        /// <returns></returns>
-        private static double[] LoadNumberImage(string nameFile)
-        {
-            var png = (Bitmap)Image.FromFile(nameFile);
-            double[] number = new double[28 * 28];
-
-            for (int x = 0; x < 28; x++)
-            {
-                for (int y = 0; y < 28; y++)
-                {
-                    number[x * 28 + y] = (255 - (png.GetPixel(y, x).R * 0.299 + png.GetPixel(y, x).G * 0.587 + png.GetPixel(y, x).B * 0.114)) / 255;
-                }
-            }
-
-            return number;
+            Console.WriteLine((double)countOfCorrectlyRecognized / 50 * 100 + "%\n");
         }
 
         private static void DigitRecognitionMNIST()
         {
             Console.WriteLine("Wait");
-            int h = 0;
+            int countOfCorrectlyRecognized = 0;
+
             for (int i = 0; i < 10000; i++)
             {
                 if (NN.GetAnswer(test[i].GetPixels()) == test[i].GetLabel())
                 {
-                    h++;
+                    countOfCorrectlyRecognized++;
                 }
             }
-            Console.WriteLine("Точность распознования выборки MNIST = {0} \n", ((double)h / 10000) * 100 + "%");
-        }
-
-        private static void SaveNS(int epochs, double h)
-        {
-            StreamWriter fout = new StreamWriter("weight" + epochs + "B" + h + ".txt");
-
-            for (int i = 1; i < NN.GetNeurons().Count(); i++)
-            {
-                for (int j = 0; j < NN.GetNeurons()[i].Count(); j++)
-                {
-                    for (int k = 0; k < NN.GetNeurons()[i][j].GetWeight().Count(); k++)
-                    {
-                        fout.WriteLine(NN.GetNeurons()[i][j].GetWeight()[k] + " ");
-                    }
-                }
-
-            }
-
-            fout.Close();
-        }
-
-        private static void LoadNS()
-        {
-            StreamReader fin = new StreamReader("weight13B9,833.txt"); //2 скрытых слоя 500, 150
-
-            for (int i = 1; i < NN.GetNeurons().Count(); i++)
-            {
-                for (int j = 0; j < NN.GetNeurons()[i].Count(); j++)
-                {
-                    for (int k = 0; k < NN.GetNeurons()[i][j].GetWeight().Count(); k++)
-                    {
-                        NN.GetNeurons()[i][j].GetWeight()[k] = double.Parse(fin.ReadLine());
-                    }
-                }
-            }
-
-            fin.Close();
-        }
-
-        private static NumberImage[] LoadDataMNIST(string pixelFile, string labelFile, int numImages = 1000)
-        {
-            NumberImage[] result = new NumberImage[numImages];
-
-            double[][] pixels = new double[28][];
-            for (int i = 0; i < pixels.Length; ++i)
-            {
-                pixels[i] = new double[28];
-            }
-
-            FileStream pixelsStream = new FileStream(pixelFile, FileMode.Open);
-            FileStream labelsStream = new FileStream(labelFile, FileMode.Open);
-            BinaryReader brImages = new BinaryReader(pixelsStream);
-            BinaryReader brLabels = new BinaryReader(labelsStream);
-
-            int magicNumber1 = brImages.ReadInt32();
-            int numberoOfImages = brImages.ReadInt32();
-            int numberOfRows = brImages.ReadInt32();
-            int numberOfColumns = brImages.ReadInt32();
-            int magicNumber2 = brLabels.ReadInt32();
-            int numberOfItems = brLabels.ReadInt32();
-
-            for (int k = 0; k < numImages; ++k)
-            {
-                for (int i = 0; i < 28; ++i)
-                {
-                    for (int j = 0; j < 28; ++j)
-                    {
-                        double b = brImages.ReadByte();
-                        pixels[i][j] = b / 255;
-                    }
-                }
-                byte label = brLabels.ReadByte();
-                NumberImage dImage = new NumberImage(pixels, label);
-                result[k] = dImage;
-            }
-            pixelsStream.Close();
-            labelsStream.Close();
-            brImages.Close();
-            brLabels.Close();
-            return result;
+            Console.WriteLine("Точность распознования выборки MNIST = {0} \n", ((double)countOfCorrectlyRecognized / 10000) * 100 + "%");
         }
     }
 }

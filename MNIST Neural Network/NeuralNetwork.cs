@@ -9,10 +9,12 @@ namespace MNIST_Neural_Network
     class NeuralNetwork
     {
         private Neuron[][] neurons; // [Количество слоев][количество нейронов в слое]
-        private Random rand = new Random();
+        private Random rand;
 
         public NeuralNetwork(int[] countNeuronsInLayers)
         {
+            rand = new Random();
+
             neurons = new Neuron[countNeuronsInLayers.Count()][];
 
             for (int i = 0; i < countNeuronsInLayers.Count(); i++)
@@ -42,18 +44,17 @@ namespace MNIST_Neural_Network
         {
             double[][] output = new double[neurons.Length][];
 
-            for (int i = 1; i < output.Length; i++)
+            //Выход первого слоя
+            output[1] = new double[neurons[1].Count()];
+            for (int j = 0; j < neurons[1].Count(); j++)
+            {
+                output[1][j] = neurons[1][j].OutputOfANeuron(input);
+            }
+
+            //Выходы оставшихся слоев
+            for (int i = 2; i < output.Length; i++)
             {
                 output[i] = new double[neurons[i].Count()];
-
-                if (i == 1)
-                {
-                    for (int j = 0; j < neurons[i].Count(); j++)
-                    {
-                        output[i][j] = neurons[i][j].OutputOfANeuron(input);
-                    }
-                }
-                else
                 {
                     for (int j = 0; j < neurons[i].Count(); j++)
                     {
@@ -61,6 +62,7 @@ namespace MNIST_Neural_Network
                     }
                 }
             }
+
             return output;
         }
 
@@ -69,7 +71,7 @@ namespace MNIST_Neural_Network
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public double GetAnswer(double[] input)
+        public int GetAnswer(double[] input)
         {
             double[][] output = OutputOfANeurons(input);
             double max = int.MinValue;
@@ -83,7 +85,7 @@ namespace MNIST_Neural_Network
                     number = i;
                 }
             }
-            
+
             return number;
         }
 
