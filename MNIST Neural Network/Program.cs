@@ -7,13 +7,12 @@ namespace MNIST_Neural_Network
         private static NeuralNetwork NN;
         private static NumberImage[] input;
         private static NumberImage[] test;
-        private static LoadAndSaveData dataWork;
         private static double[][] correctOutput;
         private static int epochs = 0;
 
         static void Main(string[] args)
         {
-            dataWork = LoadAndSaveData.GetInstance();
+            LoadAndSaveData dataWork = LoadAndSaveData.GetInstance();
             NN = new NeuralNetwork(new int[] { 28 * 28, 500, 150, 10 });
 
             string pixelFile = "train-images.idx3-ubyte";
@@ -74,13 +73,13 @@ namespace MNIST_Neural_Network
             NumberImage[] number = new NumberImage[50];
             int countOfCorrectlyRecognized = 0;
 
-            dataWork.LoadNS(NN);
+            LoadAndSaveData.GetInstance().LoadNS(NN);
 
             for (int order = 0; order < 5; order++)
             {
                 for (int num = 0; num < 10; num++)
                 {
-                    number[order * 10 + num] = dataWork.LoadNumberImage(num, order);
+                    number[order * 10 + num] = LoadAndSaveData.GetInstance().LoadNumberImage(num, order);
 
                     int answer = NN.GetAnswer(number[order * 10 + num].GetPixels());
 
