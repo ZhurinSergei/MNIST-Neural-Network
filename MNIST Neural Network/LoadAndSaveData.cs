@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MNIST_Neural_Network
 {
@@ -20,7 +16,7 @@ namespace MNIST_Neural_Network
         {
             if (instance == null)
                 instance = new LoadAndSaveData();
-      
+
             return instance;
         }
 
@@ -44,7 +40,7 @@ namespace MNIST_Neural_Network
 
         public void LoadNS(NeuralNetwork NN)
         {
-            StreamReader fin = new StreamReader("weight13B9,833.txt"); //2 скрытых слоя 500, 150
+            StreamReader fin = new StreamReader("weight13.txt"); //2 скрытых слоя 500, 150
 
             for (int i = 1; i < NN.GetNeurons().Count(); i++)
             {

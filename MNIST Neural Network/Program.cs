@@ -38,7 +38,7 @@ namespace MNIST_Neural_Network
                 }
             }
 
-            //      StartStudy();
+            //         StartStudy();
             Example();       // Example of the work of a neural network on real data (scanned images of numbers)
 
             DigitRecognitionMNIST();
